@@ -10,8 +10,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   AnimationController _controller1;
   AnimationController _controller2;
+  AnimationController _controller3;
   Animation<double> _animation1;
   Animation<double> _animation2;
+  Animation<double> _animation3;
 
   @override
   void initState() {
@@ -27,13 +29,22 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       });
 
     _controller2 = AnimationController(vsync: this, duration: Duration(milliseconds: 1000));
-    _animation2 = Tween<double>(begin: 60.0, end: 250.0).animate(_controller2);
+    _animation2 = Tween<double>(begin: 60.0, end: 260.0).animate(_controller2)..addStatusListener((status){
+      if(status == AnimationStatus.completed){
+        _controller3.forward();
+      }
+    });
+
+    _controller3 = AnimationController(vsync: this, duration: Duration(milliseconds: 1500));
+    _animation3 = Tween<double>(begin: -100, end: 100).animate(_controller3);
+
   }
 
   @override
   void dispose() {
     _controller1.dispose();
     _controller2.dispose();
+    _controller3.dispose();
   }
 
   @override
@@ -121,17 +132,41 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                         print('_onTap: _controller1 called...');
                                         _controller1.forward();
                                       },
-                                      child: Container(
-                                        width: 40.0,
-                                        height: 40.0,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.blue,
-                                        ),
-                                        child: Icon(
-                                          Icons.arrow_forward,
-                                          color: Colors.white,
-                                        ),
+                                      child: Stack(
+                                      children: <Widget>[
+                                        AnimatedBuilder(
+                                          animation: _controller3,
+                                          builder: (context, child){
+                                            return Positioned(
+                                              left: _animation3.value,
+                                              child: Container(
+                                                width: 40.0,
+                                                height: 40.0,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.blue,
+                                                ),
+                                                child: Icon(
+                                                  Icons.arrow_forward,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            );
+                                          },
+//                                        child: Container(
+//                                          width: 40.0,
+//                                          height: 40.0,
+//                                          decoration: BoxDecoration(
+//                                            shape: BoxShape.circle,
+//                                            color: Colors.blue,
+//                                          ),
+//                                          child: Icon(
+//                                            Icons.arrow_forward,
+//                                            color: Colors.white,
+//                                          ),
+//                                        ),
+                                        )
+                                      ],
                                       ),
                                     ),
                                   );
