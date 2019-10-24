@@ -179,10 +179,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                                           shape: BoxShape.circle,
                                                           color: Colors.blue,
                                                         ),
-                                                        child: hideIcon ? Container() : Icon(
-                                                          Icons.arrow_forward,
-                                                          color: Colors.white,
-                                                        ),
+                                                        child: hideIcon
+                                                            ? Container()
+                                                            : Icon(
+                                                                Icons.arrow_forward,
+                                                                color: Colors.white,
+                                                              ),
                                                       ),
                                                     );
                                                   },

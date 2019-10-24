@@ -20,13 +20,14 @@ class simpleAnimation extends StatelessWidget {
 
   Widget buildAnimation() {
     final tween = MultiTrackTween([
-      Track("opacity").add(Duration(seconds: 1), Tween(begin: 0.0, end: 1.0)),
+      Track("opacity").add(Duration(milliseconds: 750), Tween(begin: 0.0, end: 1.0)),
       Track("translateY").add(
           Duration(seconds: 1),
           Tween(
             begin: -100.0,
             end: 0.0,
-          ), curve: Curves.decelerate),
+          ),
+          curve: Curves.decelerate),
 //      Track("color")
 //          .add(Duration(seconds: 2), ColorTween(begin: Colors.red, end: Colors.blue), curve: Curves.easeIn)
 //          .add(Duration(seconds: 2), ColorTween(begin: Colors.blue, end: Colors.green), curve: Curves.easeOut),
