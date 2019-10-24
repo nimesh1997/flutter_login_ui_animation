@@ -11,9 +11,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   AnimationController _controller1;
   AnimationController _controller2;
   AnimationController _controller3;
+  AnimationController _controller4;
   Animation<double> _animation1;
   Animation<double> _animation2;
   Animation<double> _animation3;
+  Animation<double> _animation4;
 
   @override
   void initState() {
@@ -24,27 +26,43 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           /// if first animation completes start the second animation
           print('animation1 completed');
           _controller2.forward();
-          setState(() {});
         }
       });
 
     _controller2 = AnimationController(vsync: this, duration: Duration(milliseconds: 1000));
-    _animation2 = Tween<double>(begin: 60.0, end: 260.0).animate(_controller2)..addStatusListener((status){
-      if(status == AnimationStatus.completed){
-        _controller3.forward();
-      }
-    });
+    _animation2 = Tween<double>(begin: 60.0, end: 260.0).animate(_controller2)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          print('_animation2 completed');
+          _controller3.forward();
+        }
+      });
 
     _controller3 = AnimationController(vsync: this, duration: Duration(milliseconds: 1500));
-    _animation3 = Tween<double>(begin: -100, end: 100).animate(_controller3);
+    _animation3 = Tween<double>(begin: 0, end: 200).animate(_controller3)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          print('_animation3 completed');
+        }
+      });
 
+    _controller4 = AnimationController(vsync: this, duration: Duration(milliseconds: 2000));
+    _animation4 = Tween<double>(begin: 1.0, end: 32.0).animate(_controller4)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          print('_animation4 completed');
+          print('now navigate to next page');
+        }
+      });
   }
 
   @override
   void dispose() {
+    print('dispose called...');
     _controller1.dispose();
     _controller2.dispose();
     _controller3.dispose();
+    _controller4.dispose();
   }
 
   @override
@@ -52,7 +70,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return Scaffold(
       backgroundColor: Color.fromRGBO(3, 9, 23, 1),
       body: Container(
-//        padding: EdgeInsets.all(20.0),
         width: double.infinity,
         height: double.maxFinite,
         child: Stack(
@@ -65,7 +82,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                     width: double.maxFinite,
                     height: 300.0,
                     decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/design.png'), fit: BoxFit.cover)),
-//                child: Image.asset('assets/images/design.png'),
                   ),
                   1),
             ),
@@ -92,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                         textScaleFactor: 1.0,
                         style: TextStyle(fontSize: 36.0, color: Colors.white, fontWeight: FontWeight.w500),
                       ),
-                      1.0),
+                      1.6),
                   SizedBox(
                     height: 10.0,
                   ),
@@ -102,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                         textScaleFactor: 1.0,
                         style: TextStyle(fontSize: 18.0, color: Colors.white.withOpacity(0.8), fontWeight: FontWeight.w300),
                       ),
-                      1.6),
+                      1.8),
                   SizedBox(
                     height: 100.0,
                   ),
@@ -119,8 +135,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                 animation: _controller2,
                                 builder: (context, child) {
                                   return Container(
-//                                      padding: EdgeInsets.all(10.0),
-//                                    width: 60.0,
                                     width: _animation2.value,
                                     height: 60.0,
                                     decoration: BoxDecoration(
@@ -128,74 +142,41 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                       color: Colors.blue.withOpacity(0.4),
                                     ),
                                     child: InkWell(
+                                      hoverColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      splashColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
                                       onTap: () {
                                         print('_onTap: _controller1 called...');
                                         _controller1.forward();
                                       },
                                       child: Stack(
-                                      children: <Widget>[
-                                        AnimatedBuilder(
-                                          animation: _controller3,
-                                          builder: (context, child){
-                                            return Positioned(
-                                              left: _animation3.value,
-                                              child: Container(
-                                                width: 40.0,
-                                                height: 40.0,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Colors.blue,
+                                        children: <Widget>[
+                                          AnimatedBuilder(
+                                            animation: _controller3,
+                                            builder: (context, child) {
+                                              return Positioned(
+                                                left: _animation3.value,
+                                                child: Container(
+                                                  width: 60.0,
+                                                  height: 60.0,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: Colors.blue,
+                                                  ),
+                                                  child: Icon(
+                                                    Icons.arrow_forward,
+                                                    color: Colors.white,
+                                                  ),
                                                 ),
-                                                child: Icon(
-                                                  Icons.arrow_forward,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            );
-                                          },
-//                                        child: Container(
-//                                          width: 40.0,
-//                                          height: 40.0,
-//                                          decoration: BoxDecoration(
-//                                            shape: BoxShape.circle,
-//                                            color: Colors.blue,
-//                                          ),
-//                                          child: Icon(
-//                                            Icons.arrow_forward,
-//                                            color: Colors.white,
-//                                          ),
-//                                        ),
-                                        )
-                                      ],
+                                              );
+                                            },
+                                          )
+                                        ],
                                       ),
                                     ),
                                   );
                                 },
-//                                  child: Container(
-//                                    padding: EdgeInsets.all(10.0),
-////                                    width: 60.0,
-//                                    width: _animation2.value,
-//                                    height: 60.0,
-//                                    decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.blue.withOpacity(0.4)),
-//                                    child: InkWell(
-//                                      onTap: (){
-//                                        print('_onTap: _controller1 called...');
-//                                        _controller1.forward();
-//                                      },
-//                                      child: Container(
-//                                        width: 40.0,
-//                                        height: 40.0,
-//                                        decoration: BoxDecoration(
-//                                          shape: BoxShape.circle,
-//                                          color: Colors.blue,
-//                                        ),
-//                                        child: Icon(
-//                                          Icons.arrow_forward,
-//                                          color: Colors.white,
-//                                        ),
-//                                      ),
-//                                    ),
-//                                  ),
                               ),
                             ),
                           );
