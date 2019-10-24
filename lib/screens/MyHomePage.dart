@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       });
 
     _controller4 = AnimationController(vsync: this, duration: Duration(milliseconds: 1000));
-    _animation4 = Tween<double>(begin: 1.0, end: 32.0).animate(_controller4)
+    _animation4 = Tween<double>(begin: 1.0, end: 36.0).animate(_controller4)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           print('_animation4 completed');
