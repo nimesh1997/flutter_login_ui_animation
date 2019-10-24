@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_login_ui_animation/screens/LoginScreen.dart';
 import 'package:flutter_login_ui_animation/simpleAnimation.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -17,6 +18,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Animation<double> _animation3;
   Animation<double> _animation4;
 
+  bool hideIcon = false;
+
   @override
   void initState() {
     _controller1 = AnimationController(vsync: this, duration: Duration(milliseconds: 500));
@@ -29,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         }
       });
 
-    _controller2 = AnimationController(vsync: this, duration: Duration(milliseconds: 1000));
+    _controller2 = AnimationController(vsync: this, duration: Duration(milliseconds: 750));
     _animation2 = Tween<double>(begin: 60.0, end: 260.0).animate(_controller2)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
@@ -38,20 +41,26 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         }
       });
 
-    _controller3 = AnimationController(vsync: this, duration: Duration(milliseconds: 1500));
+    _controller3 = AnimationController(vsync: this, duration: Duration(milliseconds: 1000));
     _animation3 = Tween<double>(begin: 0, end: 200).animate(_controller3)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           print('_animation3 completed');
+          setState(() {
+            hideIcon = true;
+          });
+          _controller4.forward();
         }
       });
 
-    _controller4 = AnimationController(vsync: this, duration: Duration(milliseconds: 2000));
+    _controller4 = AnimationController(vsync: this, duration: Duration(milliseconds: 1000));
     _animation4 = Tween<double>(begin: 1.0, end: 32.0).animate(_controller4)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           print('_animation4 completed');
           print('now navigate to next page');
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
+//          Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
         }
       });
   }
@@ -137,6 +146,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                   return Container(
                                     width: _animation2.value,
                                     height: 60.0,
+                                    padding: EdgeInsets.all(10.0),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(40.0),
                                       color: Colors.blue.withOpacity(0.4),
@@ -157,17 +167,37 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                             builder: (context, child) {
                                               return Positioned(
                                                 left: _animation3.value,
-                                                child: Container(
-                                                  width: 60.0,
-                                                  height: 60.0,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: Colors.blue,
-                                                  ),
-                                                  child: Icon(
-                                                    Icons.arrow_forward,
-                                                    color: Colors.white,
-                                                  ),
+                                                child: AnimatedBuilder(
+                                                  animation: _controller4,
+                                                  builder: (context, child) {
+                                                    return Transform.scale(
+                                                      scale: _animation4.value,
+                                                      child: Container(
+                                                        width: 40.0,
+                                                        height: 40.0,
+                                                        decoration: BoxDecoration(
+                                                          shape: BoxShape.circle,
+                                                          color: Colors.blue,
+                                                        ),
+                                                        child: hideIcon ? Container() : Icon(
+                                                          Icons.arrow_forward,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+//                                                  child: Container(
+//                                                    width: 60.0,
+//                                                    height: 60.0,
+//                                                    decoration: BoxDecoration(
+//                                                      shape: BoxShape.circle,
+//                                                      color: Colors.blue,
+//                                                    ),
+//                                                    child: Icon(
+//                                                      Icons.arrow_forward,
+//                                                      color: Colors.white,
+//                                                    ),
+//                                                  ),
                                                 ),
                                               );
                                             },
